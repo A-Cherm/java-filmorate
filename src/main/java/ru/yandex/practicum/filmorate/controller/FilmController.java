@@ -53,6 +53,7 @@ public class FilmController {
                 validateFilm(film);
             } catch (ValidationException e) {
                 log.error("Ошибка обновления фильма c id = {}. {}", film.getId(), e.getMessage());
+                throw new ValidationException(e.getMessage());
             }
             films.put(film.getId(), film);
             log.info("Обновлён фильм {}", film);
@@ -62,14 +63,15 @@ public class FilmController {
         throw new NotFoundException("Нет фильма с id = " + film.getId());
     }
 
-    private static void validateFilm(Film film) {
+    private void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isBlank()) {
             throw new ValidationException("Название фильма не может быть пустым");
         }
-        if (film.getDescription().length() > 200) {
+        if (film.getDescription() != null && film.getDescription().length() > 200) {
             throw new ValidationException("Длина описания не может превышать 200 символов");
         }
-        if (film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
+        if (film.getReleaseDate() == null
+                || film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
             throw new ValidationException("Дата выхода не может быть раньше 28 декабря 1895го года");
         }
         if (film.getDuration() <= 0) {

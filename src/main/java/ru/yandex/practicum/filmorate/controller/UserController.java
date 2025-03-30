@@ -35,10 +35,7 @@ public class UserController {
             log.error("Ошибка добавления пользователя. {}", e.getMessage());
             throw new ValidationException(e.getMessage());
         }
-        if (user.getName() == null || user.getName().isBlank()) {
-            log.debug("Пустое имя нового пользоватетеля заполнено логином {}", user.getLogin());
-            user.setName(user.getLogin());
-        }
+        setEmptyNameToLogin(user);
         user.setId(getNextId());
         log.debug("Указан id нового пользователя: {}", user.getId());
         users.put(user.getId(), user);
@@ -59,10 +56,7 @@ public class UserController {
                 log.error("Ошибка обновления пользователя с id = {}. {}", user.getId(), e.getMessage());
                 throw new ValidationException(e.getMessage());
             }
-            if (user.getName() == null || user.getName().isBlank()) {
-                log.debug("Пустое имя пользоватетеля заполнено логином {}", user.getLogin());
-                user.setName(user.getLogin());
-            }
+            setEmptyNameToLogin(user);
             users.put(user.getId(), user);
             log.info("Обновлён пользователь {}", user);
             return user;
@@ -71,7 +65,14 @@ public class UserController {
         throw new NotFoundException("Нет пользователя с id = " + user.getId());
     }
 
-    private static void validateUser(User user) {
+    private void setEmptyNameToLogin(User user) {
+        if (user.getName() == null || user.getName().isBlank()) {
+            log.debug("Пустое имя пользоватетеля заполнено логином {}", user.getLogin());
+            user.setName(user.getLogin());
+        }
+    }
+
+    private void validateUser(User user) {
         if (user.getLogin() == null || user.getLogin().isBlank()) {
             throw new ValidationException("Название фильма не может быть пустым");
         }
@@ -84,7 +85,7 @@ public class UserController {
         if (!user.getEmail().contains("@")) {
             throw new ValidationException("Почта должна содержать символ @");
         }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
+        if (user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
             throw new ValidationException("Некорректная дата рождения");
         }
     }
