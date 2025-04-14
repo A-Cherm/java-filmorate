@@ -19,18 +19,33 @@ public class UserService {
         this.userStorage = userStorage;
     }
 
-    public Collection<User> addFriend(int id, int friendId) {
-        return List.of(userStorage.addFriend(id, friendId),
-                userStorage.addFriend(friendId, id));
+    public Collection<User> getUsers() {
+        return userStorage.getUsers();
     }
 
-    public Collection<User> deleteFriend(int id, int friendId) {
-        return List.of(userStorage.deleteFriend(id, friendId),
-                userStorage.deleteFriend(friendId, id));
+    public User getUser(int id) {
+        return userStorage.getUser(id);
+    }
+
+    public User createUser(User user) {
+        return userStorage.createUser(user);
+    }
+
+    public User updateUser(User user) {
+        return userStorage.updateUser(user);
+    }
+
+    public void addFriend(int id, int friendId) {
+        userStorage.addFriend(id, friendId);
+        userStorage.addFriend(friendId, id);
+    }
+
+    public void deleteFriend(int id, int friendId) {
+        userStorage.deleteFriend(id, friendId);
+        userStorage.deleteFriend(friendId, id);
     }
 
     public List<User> getFriends(int id) {
-        userStorage.validateId(id);
         User user = userStorage.getUser(id);
         if (user.getFriends() == null) {
             log.info("Список друзей равен null");
@@ -44,8 +59,6 @@ public class UserService {
     }
 
     public List<User> getCommonFriends(int userId1, int userId2) {
-        userStorage.validateId(userId1);
-        userStorage.validateId(userId2);
         User user1 = userStorage.getUser(userId1);
         User user2 = userStorage.getUser(userId2);
         if (user1.getFriends() == null || user2.getFriends() == null) {

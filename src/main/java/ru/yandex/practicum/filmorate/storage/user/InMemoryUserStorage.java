@@ -66,7 +66,7 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public User addFriend(int userId, int friendId) {
+    public void addFriend(int userId, int friendId) {
         validateId(userId);
         validateId(friendId);
         if (users.get(userId).getFriends() == null) {
@@ -77,11 +77,10 @@ public class InMemoryUserStorage implements UserStorage {
             users.get(userId).getFriends().add(friendId);
         }
         log.info("Добавлен друг {} у пользователя {}", friendId, userId);
-        return users.get(userId);
     }
 
     @Override
-    public User deleteFriend(int userId, int friendId) {
+    public void deleteFriend(int userId, int friendId) {
         validateId(userId);
         validateId(friendId);
         if ((users.get(userId).getFriends() != null)
@@ -90,7 +89,6 @@ public class InMemoryUserStorage implements UserStorage {
         } else {
             log.info("Нет друга {} у пользователя {}", friendId, userId);
         }
-        return users.get(userId);
     }
 
     @Override

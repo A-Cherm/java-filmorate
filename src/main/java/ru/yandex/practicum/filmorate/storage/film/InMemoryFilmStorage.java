@@ -64,7 +64,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film addLike(int filmId, int userId) {
+    public void addLike(int filmId, int userId) {
         validateId(filmId);
         if (films.get(filmId).getLikes() == null) {
             films.get(filmId).setLikes(new HashSet<>(Set.of(userId)));
@@ -73,15 +73,13 @@ public class InMemoryFilmStorage implements FilmStorage {
             films.get(filmId).getLikes().add(userId);
         }
         log.info("Добавлен лайк от пользователя {} к фильму {}", userId, filmId);
-        return films.get(filmId);
     }
 
     @Override
-    public Film deleteLike(int filmId, int userId) {
+    public void deleteLike(int filmId, int userId) {
         validateId(filmId);
         films.get(filmId).getLikes().remove(userId);
         log.info("Удалён лайк от пользователя {} к фильму {}", userId, filmId);
-        return films.get(filmId);
     }
 
     @Override
@@ -89,6 +87,16 @@ public class InMemoryFilmStorage implements FilmStorage {
         if (!films.containsKey(id)) {
             throw new NotFoundException("Нет фильма с id = " + id);
         }
+    }
+
+    @Override
+    public List<Film> getPopular(int count) {
+        return films.values()
+                .stream()
+                .filter(film -> film.getLikes() != null)
+                .sorted(Comparator.comparing(film -> -film.getLikes().size()))
+                .limit(count)
+                .toList();
     }
 
     private void validateFilm(Film film) {

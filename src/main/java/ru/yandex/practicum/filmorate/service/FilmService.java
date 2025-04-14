@@ -6,7 +6,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -20,22 +20,33 @@ public class FilmService {
         this.userStorage = userStorage;
     }
 
-    public Film addLike(int filmId, int userId) {
-        userStorage.validateId(userId);
-        return filmStorage.addLike(filmId, userId);
+    public Collection<Film> getFilms() {
+        return filmStorage.getFilms();
     }
 
-    public Film deleteLike(int filmId, int userId) {
+    public Film getFilm(int id) {
+        return filmStorage.getFilm(id);
+    }
+
+    public Film createFilm(Film film) {
+        return filmStorage.createFilm(film);
+    }
+
+    public Film updateFilm(Film film) {
+        return filmStorage.updateFilm(film);
+    }
+
+    public void addLike(int filmId, int userId) {
         userStorage.validateId(userId);
-        return filmStorage.deleteLike(filmId, userId);
+        filmStorage.addLike(filmId, userId);
+    }
+
+    public void deleteLike(int filmId, int userId) {
+        userStorage.validateId(userId);
+        filmStorage.deleteLike(filmId, userId);
     }
 
     public List<Film> getPopular(int count) {
-        return filmStorage.getFilms()
-                .stream()
-                .filter(film -> film.getLikes() != null)
-                .sorted(Comparator.comparing(film -> -film.getLikes().size()))
-                .limit(count)
-                .toList();
+        return filmStorage.getPopular(count);
     }
 }
