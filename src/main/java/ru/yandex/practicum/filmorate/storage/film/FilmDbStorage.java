@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exception.InternalServerException;
@@ -21,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FilmDbStorage implements FilmStorage {
     private final JdbcTemplate jdbc;
-    private final RowMapper<Film> filmMapper;
     private final ResultSetExtractor<List<Film>> extractor;
 
     private static final String MERGE_INTO_FILMS_GENRES = "MERGE INTO films_genres AS t " +
@@ -153,15 +151,20 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public List<Film> getPopular(int count) {
-        String sqlQuery = "SELECT p.film_id, p.name, p.description, p.release_date, p.duration, p.film_rating_id " +
+        String sqlQuery =
+                "SELECT p.*, fl.user_id, fg.genre_id, g.genre, fr.name AS rating " +
                 "FROM (SELECT f.*, COUNT(user_id) AS c " +
                 "FROM films AS f " +
                 "LEFT JOIN films_likes AS fl ON f.film_id = fl.film_id " +
                 "GROUP BY f.film_id " +
                 "ORDER BY c DESC " +
-                "LIMIT ?) AS p";
+                "LIMIT ?) AS p " +
+                "LEFT JOIN films_likes AS fl ON fl.film_id = p.film_id " +
+                "LEFT JOIN films_genres AS fg ON fg.film_id = p.film_id " +
+                "LEFT JOIN genres AS g ON g.genre_id = fg.genre_id " +
+                "LEFT JOIN film_ratings AS fr ON fr.rating_id = p.film_rating_id";
 
-        return jdbc.query(sqlQuery, filmMapper, count);
+        return jdbc.query(sqlQuery, extractor, count);
     }
 
     @Override

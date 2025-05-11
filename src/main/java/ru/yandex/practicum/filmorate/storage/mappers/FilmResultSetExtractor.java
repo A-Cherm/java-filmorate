@@ -9,17 +9,14 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 // Маппер для получения полной информации о фильме, включая названия жанров и рейтинга
 @Component
 public class FilmResultSetExtractor implements ResultSetExtractor<List<Film>> {
     @Override
     public List<Film> extractData(ResultSet rs) throws SQLException, DataAccessException {
-        Map<Integer, Film> idToFilm = new HashMap<>();
+        Map<Integer, Film> idToFilm = new LinkedHashMap<>();
 
         while (rs.next()) {
             int id = rs.getInt("film_id");

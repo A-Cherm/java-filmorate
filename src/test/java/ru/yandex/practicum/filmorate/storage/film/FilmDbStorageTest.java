@@ -11,7 +11,6 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Mpa;
 import ru.yandex.practicum.filmorate.storage.mappers.FilmResultSetExtractor;
-import ru.yandex.practicum.filmorate.storage.mappers.FilmRowMapper;
 
 import java.time.LocalDate;
 import java.util.Collection;
@@ -23,7 +22,7 @@ import static org.springframework.test.context.jdbc.Sql.ExecutionPhase.BEFORE_TE
 @JdbcTest
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-@Import({FilmDbStorage.class, FilmRowMapper.class, FilmResultSetExtractor.class})
+@Import({FilmDbStorage.class, FilmResultSetExtractor.class})
 @Sql(scripts = {"/schema.sql", "/test-data.sql"}, executionPhase = BEFORE_TEST_CLASS)
 class FilmDbStorageTest {
     private final FilmDbStorage filmDbStorage;
@@ -33,7 +32,7 @@ class FilmDbStorageTest {
         Collection<Film> films = filmDbStorage.getFilms();
 
         assertNotNull(films, "Список фильмов не инициализирован");
-        assertEquals(3, films.size(), "Неверный размер списка фильмов");
+        assertEquals(5, films.size(), "Неверный размер списка фильмов");
     }
 
     @Test
@@ -58,7 +57,7 @@ class FilmDbStorageTest {
 
         Film newFilm = filmDbStorage.createFilm(film);
 
-        assertEquals(4, newFilm.getId(), "Неверный id нового фильма");
+        assertEquals(6, newFilm.getId(), "Неверный id нового фильма");
         assertEquals("newFilm", newFilm.getName(), "Неверное название фильма");
     }
 
@@ -105,15 +104,18 @@ class FilmDbStorageTest {
 
     @Test
     void getPopular() {
-        List<Film> popFilms = filmDbStorage.getPopular(1);
+        List<Film> popFilms = filmDbStorage.getPopular(5);
 
         assertNotNull(popFilms, "Список популярных фильмов не инициализирован");
-        assertEquals(1, popFilms.size(), "Неверный размер списка популярных фильмов");
+        assertEquals(5, popFilms.size(), "Неверный размер списка популярных фильмов");
 
         Film film = popFilms.getFirst();
 
-        assertEquals(1, film.getId(), "Неверный id фильма");
-        assertEquals("Film1", film.getName(), "Неверное название фильма");
+        assertEquals(4, film.getId(), "Неверный id фильма");
+        assertEquals("Film4", film.getName(), "Неверное название фильма");
+
+        assertEquals(1, popFilms.get(1).getId());
+        assertEquals(2, popFilms.get(4).getId());
     }
 
     @Test

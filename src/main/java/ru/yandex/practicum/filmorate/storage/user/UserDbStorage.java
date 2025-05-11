@@ -121,7 +121,7 @@ public class UserDbStorage implements UserStorage {
 
     private void setEmptyNameToLogin(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
-            log.debug("Пустое имя пользоватетеля заполнено логином {}", user.getLogin());
+            log.debug("Пустое имя пользователя заполнено логином {}", user.getLogin());
             user.setName(user.getLogin());
         }
     }

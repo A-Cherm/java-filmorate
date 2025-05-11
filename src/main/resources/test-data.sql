@@ -25,16 +25,25 @@ VALUES ('G'),
 INSERT INTO films (name, description, release_date, duration, film_rating_id)
 VALUES ('Film1', '', '2000-01-01', 100, 3),
        ('Film2', 'just a film', '2010-02-02', 60, 5),
-       ('Film3', 'abc', '1990-03-03', 180, 1);
+       ('Film3', 'abc', '1990-03-03', 180, 1),
+       ('Film4', 'abc', '1990-03-03', 100, 1),
+       ('Film5', 'zxc', '1999-04-04', 111, 2);
 
 INSERT INTO films_likes (film_id, user_id)
 VALUES (1, 1),
        (1, 3),
-       (3, 2);
+       (3, 2),
+       (4, 1),
+       (4, 2),
+       (4, 3),
+       (5, 2);
 
 INSERT INTO films_genres (film_id, genre_id)
 VALUES (1, 5),
        (1, 2),
-       (2, 1);
+       (2, 1),
+       (4, 3),
+       (4, 4),
+       (5, 1);
 
 
