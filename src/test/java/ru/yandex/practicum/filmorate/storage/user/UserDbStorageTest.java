@@ -45,7 +45,7 @@ class UserDbStorageTest {
                 "Неверная дата рождения пользователя");
         assertNotNull(user.getFriends(), "Список друзей не инициализирован");
         assertEquals(1, user.getFriends().size(), "Неверный размер списка друзей");
-        assertTrue( user.getFriends().contains(3), "Неверный id в списке друзей");
+        assertTrue(user.getFriends().contains(3), "Неверный id в списке друзей");
     }
 
     @Test
