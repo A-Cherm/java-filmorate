@@ -36,8 +36,7 @@ class UserServiceTest {
         assertEquals(1, user1.getFriends().size(), "Неверный размер множества друзей");
         assertTrue(user1.getFriends().contains(2), "Неверное содержание множества друзей");
         assertNotNull(user2.getFriends(), "Множество друзей не инициализировано");
-        assertEquals(1, user2.getFriends().size(), "Неверный размер множества друзей");
-        assertTrue(user2.getFriends().contains(1), "Неверное содержание множества друзей");
+        assertEquals(0, user2.getFriends().size(), "Неверный размер множества друзей");
     }
 
     @Test

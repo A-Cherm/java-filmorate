@@ -6,10 +6,9 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.time.LocalDate;
 import java.util.*;
 
-@Component
+@Component("inMemoryFilmStorage")
 @Slf4j
 public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
@@ -35,7 +34,7 @@ public class InMemoryFilmStorage implements FilmStorage {
             throw new NotFoundException("Тело запроса добавления фильма пустое");
         }
         try {
-            validateFilm(film);
+            film.validate();
         } catch (ValidationException e) {
             throw new ValidationException("Ошибка добавления фильма." + e.getMessage());
         }
@@ -53,7 +52,7 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
         validateId(film.getId());
         try {
-            validateFilm(film);
+            film.validate();
         } catch (ValidationException e) {
             throw new ValidationException("Ошибка обновления фильма c id = " + film.getId()
                     + ". " + e.getMessage());
@@ -97,22 +96,6 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .sorted(Comparator.comparing(film -> -film.getLikes().size()))
                 .limit(count)
                 .toList();
-    }
-
-    private void validateFilm(Film film) {
-        if (film.getName() == null || film.getName().isBlank()) {
-            throw new ValidationException("Название фильма не может быть пустым");
-        }
-        if (film.getDescription() != null && film.getDescription().length() > 200) {
-            throw new ValidationException("Длина описания не может превышать 200 символов");
-        }
-        if (film.getReleaseDate() == null
-                || film.getReleaseDate().isBefore(LocalDate.of(1895, 12, 28))) {
-            throw new ValidationException("Дата выхода не может быть раньше 28 декабря 1895го года");
-        }
-        if (film.getDuration() <= 0) {
-            throw new ValidationException("Длительность фильма должна быть положительной");
-        }
     }
 
     private int getNextId() {

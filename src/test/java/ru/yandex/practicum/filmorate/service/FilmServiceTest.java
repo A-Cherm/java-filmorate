@@ -31,7 +31,7 @@ class FilmServiceTest {
     @Test
     public void shouldAddLike() {
         filmStorage.createFilm(new Film(1, "a", "b",
-                LocalDate.of(2000, 1, 1), 60, null));
+                LocalDate.of(2000, 1, 1), 60, null, null, null));
         userStorage.createUser(new User(1, "a@b", "a", "b",
                 LocalDate.of(2000,1,1), null));
 
@@ -46,7 +46,7 @@ class FilmServiceTest {
     @Test
     public void shouldDeleteLike() {
         filmStorage.createFilm(new Film(1, "a", "b",
-                LocalDate.of(2000, 1, 1), 60, null));
+                LocalDate.of(2000, 1, 1), 60, null, null, null));
         userStorage.createUser(new User(1, "a@b", "a", "b",
                 LocalDate.of(2000,1,1), null));
 
@@ -65,12 +65,12 @@ class FilmServiceTest {
 
     @Test
     public void shouldReturnPopular() {
-        filmStorage.createFilm(new Film(1, "a", "b",
-                LocalDate.of(2000, 1, 1), 60, new HashSet<>(Set.of(1, 2, 3, 4))));
+        filmStorage.createFilm(new Film(1, "a", "b", LocalDate.of(2000, 1, 1),
+                60, null, new HashSet<>(Set.of(1, 2, 3, 4)), null));
         filmStorage.createFilm(new Film(2, "b", "b",
-                LocalDate.of(2000, 1, 1), 60, null));
+                LocalDate.of(2000, 1, 1), 60, null, null, null));
         filmStorage.createFilm(new Film(3, "c", "c",
-                LocalDate.of(2000, 1, 1), 60, new HashSet<>(Set.of(2))));
+                LocalDate.of(2000, 1, 1), 60, null, new HashSet<>(Set.of(2)), null));
 
         List<Film> popularFilms = filmService.getPopular(20);
 

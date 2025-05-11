@@ -6,10 +6,9 @@ import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
 import java.util.*;
 
-@Component
+@Component("inMemoryUserStorage")
 @Slf4j
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
@@ -35,7 +34,7 @@ public class InMemoryUserStorage implements UserStorage {
             throw new NotFoundException("Тело запроса добавления пользователя пустое");
         }
         try {
-            validateUser(user);
+            user.validate();
         } catch (ValidationException e) {
             throw new ValidationException("Ошибка добавления пользователя." + e.getMessage());
         }
@@ -54,7 +53,7 @@ public class InMemoryUserStorage implements UserStorage {
         }
         validateId(user.getId());
         try {
-            validateUser(user);
+            user.validate();
         } catch (ValidationException e) {
             throw new ValidationException("Ошибка обновления пользователя с id = " + user.getId()
                     + ". " + e.getMessage());
@@ -100,26 +99,8 @@ public class InMemoryUserStorage implements UserStorage {
 
     private void setEmptyNameToLogin(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
-            log.debug("Пустое имя пользоватетеля заполнено логином {}", user.getLogin());
+            log.debug("Пустое имя пользователя заполнено логином {}", user.getLogin());
             user.setName(user.getLogin());
-        }
-    }
-
-    private void validateUser(User user) {
-        if (user.getLogin() == null || user.getLogin().isBlank()) {
-            throw new ValidationException("Название фильма не может быть пустым");
-        }
-        if (user.getLogin().contains(" ")) {
-            throw new ValidationException("Логин не может содержать пробелов");
-        }
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new ValidationException("Почта не может быть пустой");
-        }
-        if (!user.getEmail().contains("@")) {
-            throw new ValidationException("Почта должна содержать символ @");
-        }
-        if (user.getBirthday() == null || user.getBirthday().isAfter(LocalDate.now())) {
-            throw new ValidationException("Некорректная дата рождения");
         }
     }
 

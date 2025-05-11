@@ -29,8 +29,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldGetFilms() {
-        Film film = new Film(1, "a", "b",
-                LocalDate.of(2000, 1, 1), 30, null);
+        Film film = new Film(1, "a", "b", LocalDate.of(2000, 1, 1),
+                30, null, null, null);
         filmStorage.createFilm(film);
         Collection<Film> filmsFromResponse = filmStorage.getFilms();
 
@@ -50,8 +50,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeInvalidName() {
-        Film film = new Film(1, null, "a",
-                LocalDate.of(2000, 1, 1), 30, null);
+        Film film = new Film(1, null, "a", LocalDate.of(2000, 1, 1),
+                30, null, null, null);
 
         assertThrows(ValidationException.class, () -> filmStorage.createFilm(film),
                 "Отсутсвие имени должно приводить к ошибке");
@@ -63,8 +63,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeValidDescription() {
-        Film film = new Film(1, "a", "a".repeat(200),
-                LocalDate.of(2000, 1, 1), 30, null);
+        Film film = new Film(1, "a", "a".repeat(200), LocalDate.of(2000, 1, 1),
+                30, null, null, null);
 
         filmStorage.createFilm(film);
         Collection<Film> filmsFromResponse = filmStorage.getFilms();
@@ -75,8 +75,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeInvalidDescription() {
-        Film film = new Film(1, "a", "a".repeat(201),
-                LocalDate.of(2000, 1, 1), 30, null);
+        Film film = new Film(1, "a", "a".repeat(201), LocalDate.of(2000, 1, 1),
+                30, null, null, null);
 
         assertThrows(ValidationException.class, () -> filmStorage.createFilm(film),
                 "Описание не может быть длиннее 200 символов");
@@ -84,8 +84,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeValidDate() {
-        Film film = new Film(1, "a", "a",
-                LocalDate.of(1895, 12, 28), 30, null);
+        Film film = new Film(1, "a", "a", LocalDate.of(1895, 12, 28),
+                30, null, null, null);
 
         filmStorage.createFilm(film);
         Collection<Film> filmsFromResponse = filmStorage.getFilms();
@@ -96,8 +96,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeInvalidDate() {
-        Film film = new Film(1, "a", "a",
-                LocalDate.of(1895, 12, 27), 30, null);
+        Film film = new Film(1, "a", "a", LocalDate.of(1895, 12, 27),
+                30, null, null, null);
 
         assertThrows(ValidationException.class, () -> filmStorage.createFilm(film),
                 "Дата выхода не может быть раньше 28 декабря 1895 года");
@@ -105,8 +105,8 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeInvalidDuration() {
-        Film film = new Film(1, "a", "a",
-                LocalDate.of(1895, 12, 27), 0, null);
+        Film film = new Film(1, "a", "a", LocalDate.of(1895, 12, 27),
+                0, null, null, null);
 
         assertThrows(ValidationException.class, () -> filmStorage.createFilm(film),
                 "Длительность должна быть положительной");
@@ -114,13 +114,13 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldUpdateFilm() {
-        Film film = new Film(1, "a", "a",
-                LocalDate.of(2000, 1, 1), 30, null);
+        Film film = new Film(1, "a", "a", LocalDate.of(2000, 1, 1),
+                30, null, null, null);
 
         filmStorage.createFilm(film);
 
-        Film newFilm = new Film(1, "b", "b",
-                LocalDate.of(2010, 2, 2), 60, null);
+        Film newFilm = new Film(1, "b", "b", LocalDate.of(2010, 2, 2),
+                60, null, null, null);
 
         Film filmFromResponse = filmStorage.updateFilm(newFilm);
 
@@ -135,13 +135,13 @@ class InMemoryFilmStorageTest {
 
     @Test
     public void shouldBeInvalidFilmId() {
-        Film film = new Film(1, "a", "a",
-                LocalDate.of(2000, 1, 1), 30, null);
+        Film film = new Film(1, "a", "a", LocalDate.of(2000, 1, 1),
+                30, null, null, null);
 
         filmStorage.createFilm(film);
 
-        Film newFilm = new Film(2, "b", "b",
-                LocalDate.of(2010, 2, 2), 60, null);
+        Film newFilm = new Film(2, "b", "b", LocalDate.of(2010, 2, 2),
+                60, null, null, null);
 
         assertThrows(NotFoundException.class, () -> filmStorage.updateFilm(newFilm),
                 "Нельзя обновить фильм с несуществующим id");
