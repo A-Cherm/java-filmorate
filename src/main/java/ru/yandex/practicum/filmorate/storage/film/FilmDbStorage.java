@@ -81,8 +81,8 @@ public class FilmDbStorage implements FilmStorage {
                 ps.setNull(5, 4);
             }
             return ps;
-        }, keyHolder);
-//
+            }, keyHolder);
+
         Integer id = keyHolder.getKeyAs(Integer.class);
 
         if (id != null) {
