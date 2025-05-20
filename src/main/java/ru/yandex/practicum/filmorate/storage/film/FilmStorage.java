@@ -6,13 +6,13 @@ import java.util.Collection;
 import java.util.List;
 
 public interface FilmStorage {
-    Film createFilm(Film film);
-
-    Film updateFilm(Film film);
-
     Collection<Film> getFilms();
 
     Film getFilm(int id);
+
+    Film createFilm(Film film);
+
+    Film updateFilm(Film film);
 
     void addLike(int filmId, int userId);
 
