@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
@@ -9,12 +10,19 @@ import java.util.Objects;
 import java.util.Set;
 
 @Data
+@Schema(description = "Сущность пользователя")
 public class User {
+    @Schema(description = "Id пользователя", example = "1")
     private int id;
+    @Schema(description = "Почта пользователя", example = "vasya@mail.com")
     private String email;
+    @Schema(description = "Логин пользователя", example = "vasya123")
     private String login;
+    @Schema(description = "Имя пользователя", example = "Вася")
     private String name;
+    @Schema(description = "Дата рождения", example = "2000-01-01T00:00:00", type = "string")
     private LocalDate birthday;
+    @Schema(description = "Список id друзей", example = "[1,2,3]")
     private Set<Integer> friends;
 
     public User(int id, String email, String login, String name, LocalDate birthday, Set<Integer> friends) {

@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 
@@ -7,14 +8,23 @@ import java.time.LocalDate;
 import java.util.*;
 
 @Data
+@Schema(description = "Сущность фильма")
 public class Film {
+    @Schema(description = "Id фильма", example = "1")
     private int id;
+    @Schema(description = "Название фильма", example = "Отступники")
     private String name;
+    @Schema(description = "Описание фильма", example = "Лучшее описание")
     private String description;
+    @Schema(description = "Дата выхода", example = "2000-01-01T00:00:00", type = "string")
     private LocalDate releaseDate;
+    @Schema(description = "Продолжительность в минутах", example = "90")
     private int duration;
+    @Schema(description = "Возрастной рейтинг фильма")
     private Mpa mpa;
+    @Schema(description = "Id пользователей, поставивших лайк", example = "[3,1,2]")
     private Set<Integer> likes;
+    @Schema(description = "Жанры фильма")
     private List<Genre> genres;
 
     public Film(int id, String name, String description, LocalDate releaseDate, int duration,
